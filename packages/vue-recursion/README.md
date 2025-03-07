@@ -156,15 +156,17 @@ type t_slotprops<T> = {
   slot : unknown,
   depth : number,
   index : number,
+  chain : number[],
 };
 ```
 
 | Property | Type | description |
 |---|---|---|
-| data | T | this is the node itself, at depth 0 is the same value passed as `node` prop |
+| data | T | this is the node itself, at depth 0 (the root node) is the same value passed as `node` prop |
 | slot | unknown | this is the next-recursion iteration's `render function`, pass it as the `is` prop to `<component/>` |
-| depth | number | The depth of this current node. The root node's `depth` is 0 |
-| index | number | The index of this current node. The root node's `index` is 0, this is handled manually by the render logic |
+| depth | number | The node's depth. The root node's `depth` is 0 |
+| index | number | The node's index. The root node's `index` is 0, this is handled manually by the template-defined render logic |
+| chain | Array<number> | The node's absolute path. The root node's `chain` is [], this is handled manually by the component |
 
 This component uses vue's generics to infer the node's type. It may not always work tho.
 
@@ -183,3 +185,5 @@ this new aproach is more flexible, which means it is easier to make mistakes; th
 - ~~There's no longer a `chain` property on slot props, this property caused some rerenders that affected performance. It may be added back in the future if said performance issues get fixed~~
 - the `chain` property is back; use with caution
 - Exports are now `cjs` and `esm` rather than `umd`
+- This package is now part of a monorepo of renderless components [zcomps-monorepo](https://github.com/SebasZwolf/zcomps-monorepo.git). However, this should not represent any change for the user
+- Also, we changed `\t` into `  ` in the `README.md`. It look better, doesnt' it?
