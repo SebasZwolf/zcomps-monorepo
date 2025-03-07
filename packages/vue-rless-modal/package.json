@@ -36,6 +36,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SebasZwolf/zcomps-monorepo.git",
-    "directory": "packages/vue-renderless-modal"
+    "directory": "packages/vue-rless-modal"
   }
 }
