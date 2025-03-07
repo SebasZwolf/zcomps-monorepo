@@ -122,7 +122,7 @@ This example, however, is bad because the result of the interaction is lost, so 
   </RenderlessModal>
 </template>
 <script setup lang="ts">
-  function handleShow({ show } : Pick<t_RenderlessModal, 'show'>) {
+  function handleShow({ show } : Pick<InstanceType<typeof RenderlessModal>, 'show'>) {
     show<Event>(Math.ceil(Math.random() * 10))
       .then(e => {
           const $data = new FormData(e.target as HTMLFormElement);
@@ -134,13 +134,13 @@ This example, however, is bad because the result of the interaction is lost, so 
 </script>
 ```
 
-You may see that this example uses `<dialog/>` component. This is because this component is completly renderless. If you like your content display above the rest of the content, you should manage it yourself. However, you can perfectly copy this example adjust to your needs.
+You may see that this example uses `<dialog/>` component. This is because this component is completly renderless. If you like your content display above the rest of the content, you should manage it yourself. However, you can perfectly copy this example and adjust to your needs.
 
 ## Guide
  
 This component exposes the show method to pop the dialog into existance and returns a `Promise` that resolves to whatever the modal resolves (or rejects).
 
-This component is not opinionated, which mean that the `Element` displayed is responsibility of the dev. Usually, a modal is displayed using the `<dialog/>` element, but using it would mean that this component is not really _renderless_. Also, there may be cases when you don't want to display a dialog, you'd rather display a confirmation box in place or use a different element.
+This component is not opinionated, which mean that the `Element` displayed is responsibility of the dev. Usually, a modal is displayed using the `<dialog/>` element but there may be cases when you don't want it, you'd rather display a confirmation form in place or use a different `Element`. Due to this, this component was made renderless.
 
 Now, the component exposes the `v-slot` of the **default slot** as
 ```ts
@@ -172,7 +172,7 @@ type control_slot_props = {
 
 ## Common mistakes
 
-this new aproach is more flexible, which means it is easier to make mistakes; therefore, some suggestions you could use are:
+this aproach is very flexible, which means it is easier to make mistakes; therefore, some suggestions you could use are:
 
 - The easiest way to use this component is with the exposed method `show` rather than the **control slot**
 - The component does not provide a native way to avoid multiple triggers. This is done in case you have modal that you'd like to use multiple times in the same page. In case you want to prevent multiple modals showing (blocking the trigger event), i'll leave an example at the end
@@ -181,7 +181,7 @@ this new aproach is more flexible, which means it is easier to make mistakes; th
 
 - This is a pure renderless component, all styling and interaction flow **should be manually defined**.
 
-## Example
+## Example: trigger one modal at a time
 
 ```vue
 
@@ -203,7 +203,7 @@ this new aproach is more flexible, which means it is easier to make mistakes; th
     }
   }
 
-  const $modal = ref<t_RenderlessModal>(null!);
+  const $modal = ref<InstanceType<typeof RenderlessModal>>(null!);
 
   const { fn : handleClick, busy } = useFixedFn(() => {
     const n : number = Math.ceil(Math.random() * 10);
