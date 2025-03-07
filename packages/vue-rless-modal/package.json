@@ -1,5 +1,6 @@
 {
   "name": "vue-rless-modal",
+  "description": "a simplre renderless component to promisify the dialog behaviour of components",
   "version": "0.0.1",
   "type": "module",
   "files": ["dist"],
@@ -29,7 +30,8 @@
   "keywords": [
     "vue",
     "vue3",
-    "recursion",
+    "modal",
+    "dialog",
     "vue-component"
   ],
   "license": "MIT",
