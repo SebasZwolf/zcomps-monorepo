@@ -1,2 +1,3 @@
 packages:
   - "packages/vue-recursion"
+  - "packages/vue-rless-modal"
