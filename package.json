@@ -1,0 +1,20 @@
+{
+  "name": "vue-renderless",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm -r dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0",
+    "vite-plugin-dts": "^4.5.3"
+  }
+}
