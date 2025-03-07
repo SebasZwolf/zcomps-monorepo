@@ -1,0 +1,10 @@
+{
+	"extends" : [
+		"@vue/tsconfig/tsconfig.json",
+    "@vue/tsconfig/tsconfig.lib.json"
+	],
+	"compilerOptions": {
+		"composite": true,
+	},
+	"files" : ["vite.config.ts"]
+}
