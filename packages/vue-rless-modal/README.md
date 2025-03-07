@@ -19,36 +19,36 @@ You can use the _exposed_ method `show()` to trigger the interaction. This metho
 ```vue
 
 <script lang="ts" setup>
-	import { ref } from 'vue';
-	import RenderlessModal, { type slot_props } from '../src/RenderlessModal.vue';
+  import { ref } from 'vue';
+  import RenderlessModal, { type slot_props } from '../src/RenderlessModal.vue';
 
   const $modal = ref<InstanceType<typeof RenderlessModal>>(null!);
 
   function handleClick() {
     const n : number = Math.ceil(Math.random() * 10);
-		
-		$modal.value.show<number,number>(n)
-			.then(
-				e => console.log(`${e ?? n} was the number!`),
-				() => console.log(`${n} wasn't the number!`)
-			);
+    
+    $modal.value.show<number,number>(n)
+      .then(
+        e => console.log(`${e ?? n} was the number!`),
+        () => console.log(`${n} wasn't the number!`)
+      );
   }
 </script>
 
 <template>
-	<RenderlessModal ref="$modal" v-slot="{ data, resolve, reject } : slot_props<number>">
-		<fieldset>
-			<legend>is {{ data }} your number?</legend>
-			<button @click="resolve(data - 1)">-1</button>
-			<button @click="resolve()">yes</button>
-			<button @click="resolve(data + 1)">+1</button>
-			<button @click="reject">no!</button>
-		</fieldset>
-	</RenderlessModal>
+  <RenderlessModal ref="$modal" v-slot="{ data, resolve, reject } : slot_props<number>">
+    <fieldset>
+      <legend>is {{ data }} your number?</legend>
+      <button @click="resolve(data - 1)">-1</button>
+      <button @click="resolve()">yes</button>
+      <button @click="resolve(data + 1)">+1</button>
+      <button @click="reject">no!</button>
+    </fieldset>
+  </RenderlessModal>
 
-	<div>
-		<button @click="handleClick">ask it!</button>
-	</div>
+  <div>
+    <button @click="handleClick">ask it!</button>
+  </div>
 </template>
 
 ```
@@ -59,33 +59,33 @@ you can also access the `show()` hook within the **control slot** scoped slot pr
 
 ```vue
 <template>
-	<RenderlessModal>
-		<template v-slot="{ data, resolve, reject } : slot_props<number>">
-			<dialog :ref="e => (e as HTMLDialogElement)?.showModal()" @close="reject">
-				<form method="dialog" @submit.prevent="resolve">
+  <RenderlessModal>
+    <template v-slot="{ data, resolve, reject } : slot_props<number>">
+      <dialog :ref="e => (e as HTMLDialogElement)?.showModal()" @close="reject">
+        <form method="dialog" @submit.prevent="resolve">
 
-					<p>selecciona tu numero ({{ data - 2 }} - {{data + 2}})</p>
+          <p>selecciona tu numero ({{ data - 2 }} - {{data + 2}})</p>
 
-					<div>
-						<input name="val" :value="data" type="number" :max="data + 2" :min="data - 2" />
-					</div>
+          <div>
+            <input name="val" :value="data" type="number" :max="data + 2" :min="data - 2" />
+          </div>
 
-					<p>si no lo hay, cancela</p>
+          <p>si no lo hay, cancela</p>
 
-					<div>
-						<button type="submit">ok</button>
-						<button type="reset">reset</button>
-						<button type="button" @click="reject">cancel</button>
-					</div>
-				</form>
-			</dialog>
-		</template>
+          <div>
+            <button type="submit">ok</button>
+            <button type="reset">reset</button>
+            <button type="button" @click="reject">cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </template>
 
-		<template #control="{ show }">
-			<button @click="show">send it!</button>
-		</template>
+    <template #control="{ show }">
+      <button @click="show">send it!</button>
+    </template>
 
-	</RenderlessModal>
+  </RenderlessModal>
 </template>
 ```
 This example, however, is bad because the result of the interaction is lost, so here's a more advance example that handles the `show` method's return value.
@@ -93,44 +93,44 @@ This example, however, is bad because the result of the interaction is lost, so 
 ```vue
 
 <template>
-	<RenderlessModal>
-		<template v-slot="{ data, resolve, reject } : slot_props<number>">
-			<dialog :ref="e => (e as HTMLDialogElement)?.showModal()" @close="reject">
-				<form method="dialog" @submit.prevent="resolve">
+  <RenderlessModal>
+    <template v-slot="{ data, resolve, reject } : slot_props<number>">
+      <dialog :ref="e => (e as HTMLDialogElement)?.showModal()" @close="reject">
+        <form method="dialog" @submit.prevent="resolve">
 
-					<p>select your number ({{ data - 2 }} - {{data + 2}})</p>
+          <p>select your number ({{ data - 2 }} - {{data + 2}})</p>
 
-					<div>
-						<input name="val" :value="data" type="number" :max="data + 2" :min="data - 2" />
-					</div>
+          <div>
+            <input name="val" :value="data" type="number" :max="data + 2" :min="data - 2" />
+          </div>
 
-					<p>if you can't, cancel</p>
+          <p>if you can't, cancel</p>
 
-					<div>
-						<button type="submit">ok</button>
-						<button type="reset">reset</button>
-						<button type="button" @click="reject">cancel</button>
-					</div>
-				</form>
-			</dialog>
-		</template>
+          <div>
+            <button type="submit">ok</button>
+            <button type="reset">reset</button>
+            <button type="button" @click="reject">cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </template>
 
-		<template #control="{ show }">
-			<button @click="handleShow({ show })">send it!</button>
-		</template>
+    <template #control="{ show }">
+      <button @click="handleShow({ show })">send it!</button>
+    </template>
 
-	</RenderlessModal>
+  </RenderlessModal>
 </template>
 <script setup lang="ts">
-	function handleShow({ show } : Pick<t_RenderlessModal, 'show'>) {
-		show<Event>(Math.ceil(Math.random() * 10))
-			.then(e => {
-					const $data = new FormData(e.target as HTMLFormElement);
-					console.log(`${$data.get("val")} is the number!`);
-				},
-				() => console.log(`no number!`)
-			);
-	}
+  function handleShow({ show } : Pick<t_RenderlessModal, 'show'>) {
+    show<Event>(Math.ceil(Math.random() * 10))
+      .then(e => {
+          const $data = new FormData(e.target as HTMLFormElement);
+          console.log(`${$data.get("val")} is the number!`);
+        },
+        () => console.log(`no number!`)
+      );
+  }
 </script>
 ```
 
@@ -145,10 +145,10 @@ This component is not opinionated, which mean that the `Element` displayed is re
 Now, the component exposes the `v-slot` of the **default slot** as
 ```ts
 type slot_props<D = any> = {
-	resolve(e? : any) : void;
-	reject() : void;
+  resolve(e? : any) : void;
+  reject() : void;
 
-	data : D;
+  data : D;
 };
 ```
 
@@ -188,32 +188,32 @@ this new aproach is more flexible, which means it is easier to make mistakes; th
 <script lang="ts" setup>
 
   // this composable prevents calling an async function (by ignoring it) until it's previous call has finished
-	function useFixedFn<T extends unknown[]>(handler : (...args : T) => Promise<void>) {
-		const busy = ref(false);
-		const close = () => busy.value = false;
+  function useFixedFn<T extends unknown[]>(handler : (...args : T) => Promise<void>) {
+    const busy = ref(false);
+    const close = () => busy.value = false;
 
-		return {
-			fn(...args : T) {
-				if(busy.value) return;
-				busy.value = true;
+    return {
+      fn(...args : T) {
+        if(busy.value) return;
+        busy.value = true;
 
-				handler(...args).finally(close);
-			},
-			busy,
-		}
-	}
+        handler(...args).finally(close);
+      },
+      busy,
+    }
+  }
 
-	const $modal = ref<t_RenderlessModal>(null!);
+  const $modal = ref<t_RenderlessModal>(null!);
 
-	const { fn : handleClick, busy } = useFixedFn(() => {
-		const n : number = Math.ceil(Math.random() * 10);
-		
-		return $modal.value.show<number,number>(n)
-			.then(
-				e => console.log(`${e ?? n} was the number!`),
-				() => console.log(`${n} wasn't the number!`)
-			);
-	});
+  const { fn : handleClick, busy } = useFixedFn(() => {
+    const n : number = Math.ceil(Math.random() * 10);
+    
+    return $modal.value.show<number,number>(n)
+      .then(
+        e => console.log(`${e ?? n} was the number!`),
+        () => console.log(`${n} wasn't the number!`)
+      );
+  });
 
 </script>
 
